@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A fast, local-first toolkit for CTF challenges." />
+    <meta name="theme-color" content="#090b0d" />
+    <title>FlagKit — CTF Toolbox</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar">
+        <a class="brand" href="#dashboard" aria-label="FlagKit home">
+          <span class="brand-mark">FK</span>
+          <span><strong>FlagKit</strong><small>CTF TOOLBOX</small></span>
+        </a>
+
+        <nav aria-label="Tool categories">
+          <p class="nav-label">Workspace</p>
+          <button class="nav-item active" data-page="dashboard"><span class="nav-icon">⌂</span> Dashboard</button>
+          <button class="nav-item" data-page="encoders"><span class="nav-icon">⇄</span> Encoders</button>
+          <button class="nav-item" data-page="crypto"><span class="nav-icon">◇</span> Classical crypto</button>
+          <button class="nav-item" data-page="hashing"><span class="nav-icon">#</span> Hashing</button>
+          <button class="nav-item" data-page="xor"><span class="nav-icon">⊕</span> XOR lab</button>
+          <button class="nav-item" data-page="analysis"><span class="nav-icon">▥</span> Text analysis</button>
+          <button class="nav-item" data-page="data-lab"><span class="nav-icon">01</span> Data lab</button>
+          <button class="nav-item" data-page="file-lab"><span class="nav-icon">⌁</span> File lab</button>
+          <button class="nav-item" data-page="network"><span class="nav-icon">⌘</span> Network lab</button>
+          <button class="nav-item" data-page="guide"><span class="nav-icon">?</span> Field guide</button>
+          <button class="nav-item" data-page="recipes"><span class="nav-icon">⛓</span> Recipes</button>
+          <button class="nav-item" data-page="media-lab"><span class="nav-icon">◫</span> Media &amp; PCAP</button>
+          <button class="nav-item" data-page="rsa-lab"><span class="nav-icon">ℝ</span> RSA lab</button>
+          <button class="nav-item" data-page="notebook"><span class="nav-icon">✓</span> Flag notebook</button>
+        </nav>
+
+        <div class="sidebar-spacer"></div>
+        <div class="local-card">
+          <span class="pulse"></span>
+          <div><strong>Local only</strong><small>Your data stays in this tab.</small></div>
+        </div>
+        <p class="sidebar-foot">Built for legal CTFs &amp; labs.</p>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <button class="mobile-menu" id="mobile-menu" aria-label="Toggle menu">☰</button>
+          <label class="global-search">
+            <span>⌕</span>
+            <input id="tool-search" type="search" placeholder="Search tools…" autocomplete="off" />
+            <kbd>⌘ K</kbd>
+          </label>
+          <div class="top-actions">
+            <span class="status-pill"><i></i> ALL SYSTEMS LOCAL</span>
+            <button class="install-button hidden" id="install-app">INSTALL</button>
+            <a class="github-link" href="https://github.com/" target="_blank" rel="noreferrer" aria-label="GitHub">GH</a>
+          </div>
+        </header>
+
+        <div class="content">
+          <section class="page active" id="dashboard">
+            <div class="hero">
+              <div>
+                <p class="eyebrow">FIELD CONSOLE / READY</p>
+                <h1>Crack the puzzle.<br /><span>Capture the flag.</span></h1>
+                <p class="hero-copy">Fast, focused utilities for decoding, transforming, and inspecting challenge data—without leaving your browser.</p>
+              </div>
+              <div class="hero-stats" aria-label="Toolbox stats">
+                <div><strong>34</strong><span>UTILITIES</span></div>
+                <div><strong>13</strong><span>WORKBENCHES</span></div>
+                <div><strong>0<span class="accent">ms</span></strong><span>NETWORK</span></div>
+              </div>
+            </div>
+
+            <div class="section-heading">
+              <div><p class="eyebrow">QUICK ACCESS</p><h2>Pick a workbench</h2></div>
+              <span class="hint">Tip: press <kbd>⌘ K</kbd> to search</span>
+            </div>
+
+            <div class="tool-grid" id="tool-grid">
+              <button class="tool-card featured" data-go="encoders" data-search="base64 hex binary url ascii encoding decoder">
+                <span class="card-index">01</span><span class="card-icon">⇄</span>
+                <h3>Encoder / Decoder</h3><p>Convert Base64, hex, binary, URL encoding, ASCII, and more.</p>
+                <span class="card-link">OPEN WORKBENCH <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="crypto" data-search="caesar rot13 vigenere classical cipher crypto">
+                <span class="card-index">02</span><span class="card-icon">◇</span>
+                <h3>Classical Crypto</h3><p>Shift Caesar and ROT ciphers instantly with brute-force output.</p>
+                <span class="card-link">OPEN WORKBENCH <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="hashing" data-search="hash sha sha1 sha256 sha384 sha512 digest">
+                <span class="card-index">03</span><span class="card-icon">#</span>
+                <h3>Hash Generator</h3><p>Generate SHA digests and quickly identify common hash formats.</p>
+                <span class="card-link">OPEN WORKBENCH <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="xor" data-search="xor key brute force single byte hexadecimal">
+                <span class="card-index">04</span><span class="card-icon">⊕</span>
+                <h3>XOR Lab</h3><p>Apply repeating keys or rank all single-byte XOR candidates.</p>
+                <span class="card-link">OPEN WORKBENCH <b>↗</b></span>
+              </button>
+              <button class="tool-card wide" data-go="analysis" data-search="frequency entropy strings flag text analysis statistics">
+                <span class="card-index">05</span><span class="card-icon">▥</span>
+                <h3>Text Inspector</h3><p>Measure entropy, inspect character frequency, and extract strings or flag-shaped tokens.</p>
+                <span class="card-link">OPEN WORKBENCH <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="data-lab" data-search="number bases decimal binary octal hex timestamp epoch jwt token">
+                <span class="card-index">06</span><span class="card-icon">01</span>
+                <h3>Data Lab</h3><p>Convert number bases, inspect timestamps, and decode JWT structures.</p>
+                <span class="card-link">OPEN WORKBENCH <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="file-lab" data-search="file magic bytes metadata strings hash forensics carving">
+                <span class="card-index">07</span><span class="card-icon">⌁</span>
+                <h3>File Triage</h3><p>Identify signatures, hash files, inspect bytes, and extract strings locally.</p>
+                <span class="card-link">OPEN WORKBENCH <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="network" data-search="network cidr subnet ipv4 url dns http ports">
+                <span class="card-index">08</span><span class="card-icon">⌘</span>
+                <h3>Network Lab</h3><p>Calculate IPv4 networks and break URLs into useful components.</p>
+                <span class="card-link">OPEN WORKBENCH <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="guide" data-search="guide commands linux nmap wireshark stego osint web password forensics">
+                <span class="card-index">09</span><span class="card-icon">?</span>
+                <h3>CTF Field Guide</h3><p>Searchable commands and playbooks across the major challenge categories.</p>
+                <span class="card-link">OPEN GUIDE <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="recipes" data-search="recipe chain cyberchef transform pipeline base64 hex xor rot">
+                <span class="card-index">10</span><span class="card-icon">⛓</span>
+                <h3>Transform Recipes</h3><p>Stack operations into reusable decoding and encoding pipelines.</p>
+                <span class="card-link">BUILD A RECIPE <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="media-lab" data-search="pcap packets traffic image channels bit plane steganography lsb">
+                <span class="card-index">11</span><span class="card-icon">◫</span>
+                <h3>Media &amp; PCAP</h3><p>Inspect packet captures and reveal image channels or bit planes.</p>
+                <span class="card-link">OPEN WORKBENCH <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="rsa-lab" data-search="rsa primes factor modulus phi inverse exponent decrypt cryptography">
+                <span class="card-index">12</span><span class="card-icon">ℝ</span>
+                <h3>RSA Lab</h3><p>Calculate parameters and check challenge keys for common weaknesses.</p>
+                <span class="card-link">OPEN WORKBENCH <b>↗</b></span>
+              </button>
+              <button class="tool-card" data-go="notebook" data-search="flag notebook challenges notes evidence status export report">
+                <span class="card-index">13</span><span class="card-icon">✓</span>
+                <h3>Flag Notebook</h3><p>Track progress, flags, evidence, and notes with local persistence.</p>
+                <span class="card-link">OPEN NOTEBOOK <b>↗</b></span>
+              </button>
+            </div>
+          </section>
+
+          <section class="page" id="encoders">
+            <div class="page-title"><div><p class="eyebrow">TRANSFORM / CONVERT</p><h1>Encoder / Decoder</h1></div><p>Chain-friendly text transforms for common CTF encodings.</p></div>
+            <div class="workbench">
+              <div class="control-row">
+                <div class="segmented" id="codec-mode"><button class="active" data-mode="encode">Encode</button><button data-mode="decode">Decode</button></div>
+                <label>FORMAT<select id="codec-format"><option value="base64">Base64</option><option value="hex">Hexadecimal</option><option value="binary">Binary</option><option value="decimal">Decimal ASCII</option><option value="url">URL component</option><option value="rot13">ROT13</option><option value="reverse">Reverse</option><option value="html">HTML entities</option></select></label>
+                <button class="ghost-button" id="codec-swap">⇅ Swap</button>
+              </div>
+              <div class="split-editor">
+                <div class="editor"><div class="editor-head"><span>INPUT</span><button data-clear="codec-input">CLEAR</button></div><textarea id="codec-input" spellcheck="false" placeholder="Paste challenge text here…"></textarea><small id="codec-input-count">0 characters</small></div>
+                <div class="editor"><div class="editor-head"><span>OUTPUT</span><button data-copy="codec-output">COPY</button></div><textarea id="codec-output" readonly placeholder="Output appears here…"></textarea><small id="codec-status">Ready</small></div>
+              </div>
+              <div class="recipe-row"><span>QUICK RECIPES</span><button data-recipe="base64">Base64</button><button data-recipe="hex">Hex</button><button data-recipe="url">URL</button><button data-recipe="binary">Binary</button><button data-recipe="rot13">ROT13</button></div>
+            </div>
+          </section>
+
+          <section class="page" id="crypto">
+            <div class="page-title"><div><p class="eyebrow">CLASSICAL / CIPHERS</p><h1>Caesar Workshop</h1></div><p>Shift alphabetic characters while preserving case and punctuation.</p></div>
+            <div class="workbench">
+              <div class="control-row"><label>SHIFT <input id="caesar-shift" type="range" min="0" max="25" value="13" /></label><output id="shift-value">13</output><button class="primary-button" id="caesar-brute">Show all shifts</button></div>
+              <div class="split-editor"><div class="editor"><div class="editor-head"><span>CIPHERTEXT / PLAINTEXT</span><button data-clear="caesar-input">CLEAR</button></div><textarea id="caesar-input" spellcheck="false" placeholder="Gur synt vf…"></textarea></div><div class="editor"><div class="editor-head"><span>SHIFTED OUTPUT</span><button data-copy="caesar-output">COPY</button></div><textarea id="caesar-output" readonly></textarea></div></div>
+              <div id="caesar-results" class="result-list hidden"></div>
+            </div>
+          </section>
+
+          <section class="page" id="hashing">
+            <div class="page-title"><div><p class="eyebrow">DIGEST / IDENTIFY</p><h1>Hash Bench</h1></div><p>Generate modern digests and identify likely formats by length.</p></div>
+            <div class="workbench">
+              <div class="editor full"><div class="editor-head"><span>INPUT TEXT</span><button data-clear="hash-input">CLEAR</button></div><textarea id="hash-input" spellcheck="false" placeholder="Enter text to hash…"></textarea></div>
+              <div class="hash-grid" id="hash-results"></div>
+              <div class="identify-box"><label>IDENTIFY A HASH<input id="hash-identify" type="text" placeholder="Paste a hexadecimal hash…" /></label><strong id="hash-identity">Waiting for input</strong></div>
+            </div>
+          </section>
+
+          <section class="page" id="xor">
+            <div class="page-title"><div><p class="eyebrow">BITWISE / REPEATING KEY</p><h1>XOR Lab</h1></div><p>Use text or hex input and inspect ranked single-byte candidates.</p></div>
+            <div class="workbench">
+              <div class="control-row"><label>INPUT FORMAT<select id="xor-format"><option value="text">Text / UTF-8</option><option value="hex">Hex bytes</option></select></label><label>KEY<input id="xor-key" type="text" value="flag" placeholder="Text key or 0x2a" /></label><button class="primary-button" id="xor-brute">Brute-force 1 byte</button></div>
+              <div class="split-editor"><div class="editor"><div class="editor-head"><span>INPUT</span><button data-clear="xor-input">CLEAR</button></div><textarea id="xor-input" spellcheck="false" placeholder="Paste data here…"></textarea></div><div class="editor"><div class="editor-head"><span>OUTPUT</span><button data-copy="xor-output">COPY</button></div><textarea id="xor-output" readonly></textarea><small id="xor-hex"></small></div></div>
+              <div id="xor-results" class="result-list hidden"></div>
+            </div>
+          </section>
+
+          <section class="page" id="analysis">
+            <div class="page-title"><div><p class="eyebrow">INSPECT / MEASURE</p><h1>Text Inspector</h1></div><p>Surface structure, printable strings, and flag-shaped tokens.</p></div>
+            <div class="workbench">
+              <div class="editor full"><div class="editor-head"><span>SAMPLE</span><button data-clear="analysis-input">CLEAR</button></div><textarea id="analysis-input" spellcheck="false" placeholder="Paste text, logs, or a hex dump…"></textarea></div>
+              <div class="metric-grid"><div><span>CHARACTERS</span><strong id="metric-chars">0</strong></div><div><span>WORDS</span><strong id="metric-words">0</strong></div><div><span>UNIQUE</span><strong id="metric-unique">0</strong></div><div><span>ENTROPY</span><strong id="metric-entropy">0.00</strong></div></div>
+              <div class="analysis-grid"><div><h3>CHARACTER FREQUENCY</h3><div id="frequency-chart" class="frequency-chart empty">No data yet</div></div><div><h3>EXTRACTED TOKENS</h3><div id="token-list" class="token-list empty">No tokens found</div></div></div>
+            </div>
+          </section>
+
+          <section class="page" id="data-lab">
+            <div class="page-title"><div><p class="eyebrow">CONVERT / INSPECT</p><h1>Data Lab</h1></div><p>Common conversions for challenge numbers, dates, and web tokens.</p></div>
+            <div class="lab-stack">
+              <div class="workbench mini-bench">
+                <div class="bench-title"><div><span>01</span><h2>Number Bases</h2></div><p>Enter a value and choose its source base.</p></div>
+                <div class="inline-inputs"><label>SOURCE BASE<select id="number-base"><option value="10">Decimal</option><option value="16">Hexadecimal</option><option value="2">Binary</option><option value="8">Octal</option></select></label><label class="grow">VALUE<input id="number-input" type="text" placeholder="1337" /></label></div>
+                <div class="output-grid"><div><span>DECIMAL</span><code id="number-dec">—</code></div><div><span>HEXADECIMAL</span><code id="number-hex">—</code></div><div><span>BINARY</span><code id="number-bin">—</code></div><div><span>OCTAL</span><code id="number-oct">—</code></div></div>
+              </div>
+              <div class="workbench mini-bench">
+                <div class="bench-title"><div><span>02</span><h2>Unix Time</h2></div><p>Convert seconds, milliseconds, or a date.</p></div>
+                <div class="inline-inputs"><label>INPUT TYPE<select id="time-mode"><option value="seconds">Unix seconds</option><option value="milliseconds">Unix milliseconds</option><option value="date">Date / ISO string</option></select></label><label class="grow">VALUE<input id="time-input" type="text" placeholder="1692201600" /></label><button class="ghost-button" id="time-now">USE NOW</button></div>
+                <div class="output-grid triple"><div><span>LOCAL</span><code id="time-local">—</code></div><div><span>UTC / ISO</span><code id="time-iso">—</code></div><div><span>UNIX SECONDS</span><code id="time-unix">—</code></div></div>
+              </div>
+              <div class="workbench mini-bench">
+                <div class="bench-title"><div><span>03</span><h2>JWT Inspector</h2></div><p>Decodes structure only; it does not verify signatures.</p></div>
+                <div class="editor full compact-editor"><div class="editor-head"><span>JSON WEB TOKEN</span><button data-clear="jwt-input">CLEAR</button></div><textarea id="jwt-input" spellcheck="false" placeholder="eyJhbGciOi…"></textarea></div>
+                <div class="jwt-grid"><div><span>HEADER</span><pre id="jwt-header">—</pre></div><div><span>PAYLOAD</span><pre id="jwt-payload">—</pre></div></div><p class="inline-note" id="jwt-note">Waiting for a token.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="page" id="file-lab">
+            <div class="page-title"><div><p class="eyebrow">FORENSICS / TRIAGE</p><h1>File Lab</h1></div><p>Inspect files locally. Nothing is uploaded or transmitted.</p></div>
+            <div class="workbench">
+              <label class="drop-zone" id="file-drop"><input id="file-input" type="file" /><span class="drop-icon">＋</span><strong>Drop a file or click to browse</strong><small>Magic bytes, SHA-256, byte preview, and printable strings</small></label>
+              <div id="file-results" class="file-results hidden">
+                <div class="file-summary"><div><span>FILE</span><strong id="file-name">—</strong></div><div><span>SIZE</span><strong id="file-size">—</strong></div><div><span>DETECTED TYPE</span><strong id="file-type">—</strong></div></div>
+                <div class="detail-block"><div><span>SHA-256</span><button data-copy-text="file-hash">COPY</button></div><code id="file-hash">—</code></div>
+                <div class="detail-block"><div><span>FIRST 64 BYTES</span><button data-copy-text="file-bytes">COPY</button></div><code id="file-bytes">—</code></div>
+                <div class="detail-block"><div><span>PRINTABLE STRINGS (MIN 6)</span><em id="file-string-count">0 found</em></div><pre id="file-strings">—</pre></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="page" id="network">
+            <div class="page-title"><div><p class="eyebrow">NETWORK / PARSE</p><h1>Network Lab</h1></div><p>Quick network math and URL anatomy for traffic challenges.</p></div>
+            <div class="lab-stack">
+              <div class="workbench mini-bench">
+                <div class="bench-title"><div><span>01</span><h2>IPv4 / CIDR Calculator</h2></div><p>Network boundaries and usable host range.</p></div>
+                <div class="inline-inputs"><label class="grow">ADDRESS / PREFIX<input id="cidr-input" type="text" value="192.168.1.42/24" /></label></div>
+                <div class="output-grid triple"><div><span>NETWORK</span><code id="cidr-network">—</code></div><div><span>BROADCAST</span><code id="cidr-broadcast">—</code></div><div><span>NETMASK</span><code id="cidr-mask">—</code></div><div><span>FIRST HOST</span><code id="cidr-first">—</code></div><div><span>LAST HOST</span><code id="cidr-last">—</code></div><div><span>ADDRESSES</span><code id="cidr-count">—</code></div></div>
+              </div>
+              <div class="workbench mini-bench">
+                <div class="bench-title"><div><span>02</span><h2>URL Inspector</h2></div><p>Split and decode a full URL without requesting it.</p></div>
+                <div class="inline-inputs"><label class="grow">URL<input id="url-input" type="text" placeholder="https://user:pass@example.com:8443/path?q=flag%7Bdemo%7D#part" /></label></div>
+                <div class="url-results" id="url-results"><span>Waiting for a URL.</span></div>
+              </div>
+              <div class="port-strip"><span>COMMON PORTS</span><code>21 FTP</code><code>22 SSH</code><code>23 TELNET</code><code>25 SMTP</code><code>53 DNS</code><code>80 HTTP</code><code>110 POP3</code><code>139/445 SMB</code><code>443 HTTPS</code><code>3306 MYSQL</code><code>3389 RDP</code><code>8080 HTTP-ALT</code></div>
+            </div>
+          </section>
+
+          <section class="page" id="guide">
+            <div class="page-title"><div><p class="eyebrow">REFERENCE / PLAYBOOKS</p><h1>CTF Field Guide</h1></div><p>Practical starting points for the challenge families in Cyber Skyline Trove.</p></div>
+            <div class="guide-actions"><button class="ghost-button" id="snippet-new">＋ ADD SNIPPET</button><button class="ghost-button" id="guide-export">EXPORT JSON</button><label class="ghost-button file-button">IMPORT JSON<input id="guide-import" type="file" accept="application/json" /></label></div>
+            <form class="snippet-form hidden" id="snippet-form"><div class="inline-inputs"><label>NAME<input id="snippet-title" required placeholder="My command" /></label><label>CATEGORY<input id="snippet-category" required placeholder="Custom" /></label><label class="grow">COMMAND<input id="snippet-command" required placeholder="tool --option target" /></label><button class="primary-button" type="submit">SAVE</button><button class="ghost-button" type="button" id="snippet-cancel">CANCEL</button></div></form>
+            <div class="guide-controls"><label class="guide-search"><span>⌕</span><input id="guide-search" type="search" placeholder="Search commands, tools, or topics…" /></label><div class="guide-filters" id="guide-filters"></div></div>
+            <div class="guide-grid" id="guide-grid"></div>
+            <p class="guide-disclaimer">Use scanning, cracking, and exploitation commands only against challenge infrastructure or systems you have explicit permission to test.</p>
+          </section>
+
+          <section class="page" id="recipes">
+            <div class="page-title"><div><p class="eyebrow">CHAIN / TRANSFORM</p><h1>Recipe Builder</h1></div><p>Run data through an ordered stack of local transformations.</p></div>
+            <div class="recipe-layout">
+              <aside class="operation-palette"><h3>OPERATIONS</h3><div id="operation-list"></div></aside>
+              <div class="recipe-main">
+                <div class="recipe-toolbar"><strong id="recipe-count">0 OPERATIONS</strong><div><button class="ghost-button" id="recipe-save">SAVE RECIPE</button><button class="ghost-button" id="recipe-load">LOAD</button><button class="ghost-button" id="recipe-clear">CLEAR</button></div></div>
+                <div class="recipe-chain" id="recipe-chain"><div class="empty-chain">Choose operations from the left to build a recipe.</div></div>
+                <div class="split-editor"><div class="editor"><div class="editor-head"><span>INPUT</span><button data-clear="recipe-input">CLEAR</button></div><textarea id="recipe-input" spellcheck="false" placeholder="Paste source data…"></textarea></div><div class="editor"><div class="editor-head"><span>FINAL OUTPUT</span><button data-copy="recipe-output">COPY</button></div><textarea id="recipe-output" readonly></textarea><small id="recipe-status">Ready</small></div></div>
+              </div>
+            </div>
+          </section>
+
+          <section class="page" id="media-lab">
+            <div class="page-title"><div><p class="eyebrow">PACKETS / PIXELS</p><h1>Media &amp; PCAP Lab</h1></div><p>Analyze captures and image data entirely inside the browser.</p></div>
+            <div class="lab-stack">
+              <div class="workbench mini-bench">
+                <div class="bench-title"><div><span>01</span><h2>PCAP Inspector</h2></div><p>Classic PCAP: Ethernet, IPv4, TCP, UDP, DNS, ICMP, and ARP.</p></div>
+                <label class="drop-zone compact-drop"><input id="pcap-input" type="file" accept=".pcap,application/vnd.tcpdump.pcap" /><span class="drop-icon">＋</span><strong>Select a .pcap capture</strong><small>Headers and payload previews are parsed locally</small></label>
+                <div id="pcap-results" class="hidden"><div class="metric-grid"><div><span>PACKETS</span><strong id="pcap-packets">0</strong></div><div><span>CAPTURE SIZE</span><strong id="pcap-size">0</strong></div><div><span>DURATION</span><strong id="pcap-duration">0s</strong></div><div><span>ENDIAN</span><strong id="pcap-endian">—</strong></div></div><div class="pcap-protocols" id="pcap-protocols"></div><div class="packet-table-wrap"><table class="packet-table"><thead><tr><th>#</th><th>TIME</th><th>SOURCE</th><th>DESTINATION</th><th>PROTO</th><th>INFO</th></tr></thead><tbody id="packet-rows"></tbody></table></div></div>
+                <p class="inline-note" id="pcap-note">PCAPNG is identified in File Lab; this inspector currently parses classic PCAP files.</p>
+              </div>
+              <div class="workbench mini-bench">
+                <div class="bench-title"><div><span>02</span><h2>Image Channel Viewer</h2></div><p>View RGB/alpha channels or any individual bit plane.</p></div>
+                <div class="image-controls"><label class="ghost-button file-button">SELECT IMAGE<input id="image-input" type="file" accept="image/*" /></label><label>VIEW<select id="image-view"><option value="original">Original</option><option value="red">Red channel</option><option value="green">Green channel</option><option value="blue">Blue channel</option><option value="alpha">Alpha channel</option><option value="gray">Grayscale</option><option value="bit">Bit plane</option></select></label><label id="bit-control" class="hidden">CHANNEL<select id="bit-channel"><option value="red">Red</option><option value="green">Green</option><option value="blue">Blue</option><option value="alpha">Alpha</option></select></label><label id="bit-index-control" class="hidden">BIT<select id="bit-index"><option value="0">0 — LSB</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7 — MSB</option></select></label><button class="ghost-button" id="image-download">DOWNLOAD VIEW</button></div>
+                <div class="canvas-stage"><canvas id="image-canvas"></canvas><p id="image-placeholder">Select an image to begin.</p></div><div class="image-meta" id="image-meta">No image loaded.</div>
+              </div>
+            </div>
+          </section>
+
+          <section class="page" id="rsa-lab">
+            <div class="page-title"><div><p class="eyebrow">BIGINT / CHECKS</p><h1>RSA Lab</h1></div><p>Parameter math for educational CTF keys. Large factorization is intentionally out of scope.</p></div>
+            <div class="lab-stack">
+              <div class="workbench mini-bench"><div class="bench-title"><div><span>01</span><h2>Key Calculator</h2></div><p>Calculate n, φ(n), d, and CRT values from p, q, and e.</p></div><div class="rsa-inputs"><label>P<input id="rsa-p" value="61" /></label><label>Q<input id="rsa-q" value="53" /></label><label>PUBLIC E<input id="rsa-e" value="65537" /></label></div><div class="output-grid triple"><div><span>MODULUS N</span><code id="rsa-n">—</code></div><div><span>PHI</span><code id="rsa-phi">—</code></div><div><span>PRIVATE D</span><code id="rsa-d">—</code></div><div><span>DP</span><code id="rsa-dp">—</code></div><div><span>DQ</span><code id="rsa-dq">—</code></div><div><span>Q INVERSE</span><code id="rsa-qinv">—</code></div></div><div class="rsa-findings" id="rsa-findings"></div></div>
+              <div class="workbench mini-bench"><div class="bench-title"><div><span>02</span><h2>Raw RSA Operation</h2></div><p>Compute m = cᵈ mod n or c = mᵉ mod n without padding.</p></div><div class="rsa-inputs four"><label>VALUE<input id="rsa-value" placeholder="2790" /></label><label>EXPONENT<input id="rsa-exp" placeholder="2753" /></label><label>MODULUS<input id="rsa-mod" placeholder="3233" /></label><button class="primary-button" id="rsa-compute">COMPUTE</button></div><div class="rsa-result"><span>RESULT</span><code id="rsa-result">—</code></div></div>
+              <div class="workbench mini-bench"><div class="bench-title"><div><span>03</span><h2>Shared-Prime Check</h2></div><p>Find a common factor between two RSA moduli using GCD.</p></div><div class="rsa-inputs"><label class="grow">MODULUS A<input id="rsa-na" value="3233" /></label><label class="grow">MODULUS B<input id="rsa-nb" value="2867" /></label></div><div class="rsa-result"><span>GCD / SHARED FACTOR</span><code id="rsa-gcd">—</code></div></div>
+            </div>
+          </section>
+
+          <section class="page" id="notebook">
+            <div class="page-title"><div><p class="eyebrow">TRACK / DOCUMENT</p><h1>Flag Notebook</h1></div><p>Stored only in this browser. Export a report whenever you need portability.</p></div>
+            <div class="notebook-toolbar"><button class="primary-button" id="note-new">＋ NEW CHALLENGE</button><div><button class="ghost-button" id="notes-export-json">EXPORT JSON</button><button class="ghost-button" id="notes-export-md">EXPORT REPORT</button><label class="ghost-button file-button">IMPORT<input id="notes-import" type="file" accept="application/json" /></label></div></div>
+            <form class="note-form hidden" id="note-form"><input id="note-id" type="hidden" /><div class="note-form-grid"><label>CHALLENGE<input id="note-title" required placeholder="Challenge name" /></label><label>CATEGORY<select id="note-category"><option>Cryptography</option><option>Forensics</option><option>Network</option><option>Web</option><option>OSINT</option><option>Passwords</option><option>Linux</option><option>Other</option></select></label><label>STATUS<select id="note-status"><option>Not started</option><option>In progress</option><option>Solved</option><option>Blocked</option></select></label><label>FLAG<input id="note-flag" placeholder="flag{…}" /></label></div><label>NOTES / EVIDENCE<textarea id="note-body" placeholder="Commands, observations, evidence, and next steps…"></textarea></label><div class="form-actions"><button class="primary-button" type="submit">SAVE CHALLENGE</button><button class="ghost-button" type="button" id="note-cancel">CANCEL</button></div></form>
+            <div class="notebook-stats" id="notebook-stats"></div><div class="notebook-grid" id="notebook-grid"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <div class="toast" id="toast" role="status">Copied to clipboard</div>
+    <script src="app.js"></script>
+    <script src="advanced.js"></script>
+  </body>
+</html>
