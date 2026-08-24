@@ -4,10 +4,38 @@ A dependency-free, browser-based toolbox for legal CTF challenges and security l
 
 ## Run
 
-Open `index.html` directly, or serve the directory locally:
+### Local setup (Windows)
 
-```bash
-python3 -m http.server 8080 --directory /home/sudosmash/ctf-toolbox
+1. Install [Python 3 for Windows](https://www.python.org/downloads/windows/) if it
+   is not already installed. Enable **Add Python to PATH** in its installer.
+2. Double-click `install.cmd` in this folder.
+3. Use the **FlagKit CTF Toolbox** shortcut added to the desktop or Start menu.
+
+The shortcut starts a local-only web server, opens `http://localhost:8080` in the
+default browser, and keeps a terminal window open while FlagKit is running. Close
+that terminal or press <kbd>Ctrl</kbd>+<kbd>C</kbd> to stop the server.
+
+For a custom port or to avoid opening the browser automatically, run this from
+PowerShell in the FlagKit folder:
+
+```powershell
+$env:PORT = 9000
+powershell.exe -ExecutionPolicy Bypass -File .\scripts\flagkit.ps1 -NoBrowser
+```
+
+### Run without installing
+
+Open `index.html` directly, run the PowerShell launcher, or serve the repository
+manually from PowerShell:
+
+```powershell
+py -3 -m http.server 8080
+```
+
+On macOS or Linux, use:
+
+```sh
+python3 -m http.server 8080
 ```
 
 Then visit `http://localhost:8080`.
