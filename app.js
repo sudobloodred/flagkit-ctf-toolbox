@@ -226,10 +226,18 @@ const guideItems = [
 ];
 let guideCategory = 'All';
 function renderGuide() {
-  const query = $('#guide-search').value.trim().toLowerCase(); const filtered = guideItems.filter((item) => (guideCategory === 'All' || item.category === guideCategory) && (!query || `${item.title} ${item.category} ${item.summary} ${item.commands.join(' ')}`.toLowerCase().includes(query)));
-  $('#guide-grid').innerHTML = filtered.length ? filtered.map((item) => `<article class="guide-card"><div class="guide-card-head"><h3>${item.title}</h3><div><span class="guide-tag">${item.category.toUpperCase()}</span>${item.custom ? `<button class="snippet-delete" data-delete-snippet="${item.id}">DELETE</button>` : ''}</div></div><p>${item.summary}</p><div class="command-list">${item.commands.map((cmd) => `<div class="command"><code>${escapeHtml(cmd)}</code><button data-command="${encodeURIComponent(cmd)}">COPY</button></div>`).join('')}</div></article>`).join('') : '<div class="guide-empty">No matching field notes.</div>';
+  const query = $('#guide-search').value.trim().toLowerCase();
+  const filtered = guideItems.filter((item) => (guideCategory === 'All' || item.category === guideCategory) && (!query || `${item.title} ${item.category} ${item.summary} ${item.commands.join(' ')}`.toLowerCase().includes(query)));
+  $('#guide-grid').innerHTML = filtered.length
+    ? filtered.map((item) => {
+        const deleteButton = item.custom
+          ? `<button class="snippet-delete" data-delete-snippet="${encodeURIComponent(item.id)}">DELETE</button>`
+          : '';
+        return `<article class="guide-card"><div class="guide-card-head"><h3>${escapeHtml(String(item.title))}</h3><div><span class="guide-tag">${escapeHtml(String(item.category).toUpperCase())}</span>${deleteButton}</div></div><p>${escapeHtml(String(item.summary))}</p><div class="command-list">${item.commands.map((cmd) => `<div class="command"><code>${escapeHtml(String(cmd))}</code><button data-command="${encodeURIComponent(String(cmd))}">COPY</button></div>`).join('')}</div></article>`;
+      }).join('')
+    : '<div class="guide-empty">No matching field notes.</div>';
   $$('[data-command]').forEach((button) => button.addEventListener('click', () => copyText(decodeURIComponent(button.dataset.command))));
-  $$('[data-delete-snippet]').forEach((button) => button.addEventListener('click', () => window.deleteCustomSnippet?.(button.dataset.deleteSnippet)));
+  $$('[data-delete-snippet]').forEach((button) => button.addEventListener('click', () => window.deleteCustomSnippet?.(decodeURIComponent(button.dataset.deleteSnippet))));
 }
 const guideCategories = ['All', ...new Set(guideItems.map((item) => item.category))];
 $('#guide-filters').innerHTML = guideCategories.map((category) => `<button class="${category === 'All' ? 'active' : ''}" data-guide-category="${category}">${category}</button>`).join('');

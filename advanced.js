@@ -119,8 +119,41 @@
   updateRsa(); updateShared();
 
   // Flag notebook
+  const MAX_IMPORTED_NOTES = 500;
+  const MAX_IMPORTED_SNIPPETS = 200;
+  const isSafeLocalId = (value) => typeof value === 'string' && /^[A-Za-z0-9-]{1,64}$/.test(value);
+  const boundedText = (value, limit) => typeof value === 'string' ? value.trim().slice(0, limit) : '';
+  const normalizeTimestamp = (value) => Number.isFinite(value) && value > 0 ? value : Date.now();
+  const noteStatuses = new Set(['Not started', 'In progress', 'Solved']);
+  function normalizeNote(value) {
+    if (!value || typeof value !== 'object') return null;
+    const title = boundedText(value.title, 160);
+    if (!title) return null;
+    return {
+      id: isSafeLocalId(value.id) ? value.id : crypto.randomUUID(),
+      title,
+      category: boundedText(value.category, 80) || 'Other',
+      status: noteStatuses.has(value.status) ? value.status : 'Not started',
+      flag: boundedText(value.flag, 500),
+      body: boundedText(value.body, 12000),
+      created: normalizeTimestamp(value.created),
+      updated: normalizeTimestamp(value.updated)
+    };
+  }
+  function normalizeSnippet(value) {
+    if (!value || typeof value !== 'object') return null;
+    const title = boundedText(value.title, 160);
+    const command = boundedText(value.command, 4000);
+    if (!title || !command) return null;
+    return {
+      id: isSafeLocalId(value.id) ? value.id : crypto.randomUUID(),
+      title,
+      category: boundedText(value.category, 80) || 'Custom',
+      command
+    };
+  }
   const notesKey='flagkit.notes.v1'; let notes=[];
-  try{notes=JSON.parse(localStorage.getItem(notesKey)||'[]');if(!Array.isArray(notes))notes=[];}catch{notes=[];}
+  try{const saved=JSON.parse(localStorage.getItem(notesKey)||'[]');notes=Array.isArray(saved)?saved.map(normalizeNote).filter(Boolean).slice(0,MAX_IMPORTED_NOTES):[];}catch{notes=[];}
   const persistNotes=()=>localStorage.setItem(notesKey,JSON.stringify(notes));
   function renderNotes(){const counts={total:notes.length,solved:notes.filter(n=>n.status==='Solved').length,progress:notes.filter(n=>n.status==='In progress').length,flags:notes.filter(n=>n.flag).length};$('#notebook-stats').innerHTML=[['CHALLENGES',counts.total],['SOLVED',counts.solved],['IN PROGRESS',counts.progress],['FLAGS SAVED',counts.flags]].map(([label,value])=>`<div><span>${label}</span><strong>${value}</strong></div>`).join('');$('#notebook-grid').innerHTML=notes.length?notes.sort((a,b)=>b.updated-a.updated).map(note=>`<article class="note-card"><div class="note-head"><h3>${safe(note.title)}</h3><span class="note-status ${note.status.toLowerCase().replace(/\s/g,'-')}">${safe(note.status)}</span></div><div class="note-meta">${safe(note.category)} • UPDATED ${new Date(note.updated).toLocaleDateString()}</div>${note.flag?`<div class="note-flag">${safe(note.flag)}</div>`:''}<p class="note-body">${safe(note.body||'No notes yet.')}</p><div class="note-actions"><button data-note-edit="${note.id}">EDIT</button><button data-note-copy="${note.id}">COPY FLAG</button><button data-note-delete="${note.id}">DELETE</button></div></article>`).join(''):'<div class="notebook-empty">No challenges yet. Create one to start your field log.</div>';$$('[data-note-edit]').forEach(b=>b.addEventListener('click',()=>openNote(b.dataset.noteEdit)));$$('[data-note-copy]').forEach(b=>b.addEventListener('click',()=>{const note=notes.find(n=>n.id===b.dataset.noteCopy);note?.flag?copyText(note.flag):toast('No flag saved');}));$$('[data-note-delete]').forEach(b=>b.addEventListener('click',()=>{notes=notes.filter(n=>n.id!==b.dataset.noteDelete);persistNotes();renderNotes();}));}
   function openNote(id){const note=notes.find(n=>n.id===id);$('#note-id').value=note?.id||'';$('#note-title').value=note?.title||'';$('#note-category').value=note?.category||'Cryptography';$('#note-status').value=note?.status||'Not started';$('#note-flag').value=note?.flag||'';$('#note-body').value=note?.body||'';$('#note-form').classList.remove('hidden');$('#note-title').focus();}
@@ -128,17 +161,17 @@
   $('#note-form').addEventListener('submit',(event)=>{event.preventDefault();const id=$('#note-id').value||crypto.randomUUID();const old=notes.find(n=>n.id===id);const note={id,title:$('#note-title').value.trim(),category:$('#note-category').value,status:$('#note-status').value,flag:$('#note-flag').value.trim(),body:$('#note-body').value.trim(),created:old?.created||Date.now(),updated:Date.now()};notes=notes.filter(n=>n.id!==id);notes.push(note);persistNotes();renderNotes();event.target.classList.add('hidden');toast('Challenge saved locally');});
   $('#notes-export-json').addEventListener('click',()=>download('flagkit-notebook.json',JSON.stringify({version:1,exported:new Date().toISOString(),notes},null,2)));
   $('#notes-export-md').addEventListener('click',()=>{const report=`# FlagKit CTF Report\n\nExported ${new Date().toLocaleString()}\n\n${notes.map(n=>`## ${n.title}\n\n- Category: ${n.category}\n- Status: ${n.status}\n- Flag: ${n.flag||'—'}\n\n${n.body||'No notes.'}`).join('\n\n---\n\n')}`;download('flagkit-report.md',report,'text/markdown');});
-  $('#notes-import').addEventListener('change',async(event)=>{try{const data=await readJsonFile(event.target.files[0]);const incoming=Array.isArray(data)?data:data.notes;if(!Array.isArray(incoming))throw new Error('No notes array found');notes=incoming.filter(n=>n&&n.title).map(n=>({...n,id:n.id||crypto.randomUUID(),updated:n.updated||Date.now()}));persistNotes();renderNotes();toast(`${notes.length} notes imported`);}catch(error){toast(`Import failed: ${error.message}`);}event.target.value='';});renderNotes();
+  $('#notes-import').addEventListener('change',async(event)=>{try{const data=await readJsonFile(event.target.files[0]);const incoming=Array.isArray(data)?data:data.notes;if(!Array.isArray(incoming))throw new Error('No notes array found');notes=incoming.map(normalizeNote).filter(Boolean).slice(0,MAX_IMPORTED_NOTES);persistNotes();renderNotes();toast(`${notes.length} notes imported`);}catch(error){toast(`Import failed: ${error.message}`);}event.target.value='';});renderNotes();
 
   // Custom command snippets and guide portability
-  const snippetsKey='flagkit.snippets.v1';let snippets=[];try{snippets=JSON.parse(localStorage.getItem(snippetsKey)||'[]');if(!Array.isArray(snippets))snippets=[];}catch{snippets=[];}
+  const snippetsKey='flagkit.snippets.v1';let snippets=[];try{const saved=JSON.parse(localStorage.getItem(snippetsKey)||'[]');snippets=Array.isArray(saved)?saved.map(normalizeSnippet).filter(Boolean).slice(0,MAX_IMPORTED_SNIPPETS):[];}catch{snippets=[];}
   function syncSnippets(){for(let i=guideItems.length-1;i>=0;i--)if(guideItems[i].custom)guideItems.splice(i,1);snippets.forEach(s=>guideItems.push({title:s.title,category:s.category||'Custom',summary:'User-created local command snippet.',commands:[s.command],custom:true,id:s.id}));localStorage.setItem(snippetsKey,JSON.stringify(snippets));rebuildGuideFilters();renderGuide();}
   function rebuildGuideFilters(){const categories=['All',...new Set(guideItems.map(i=>i.category))];if(!categories.includes(guideCategory))guideCategory='All';$('#guide-filters').innerHTML=categories.map(c=>`<button class="${c===guideCategory?'active':''}" data-guide-category="${safe(c)}">${safe(c)}</button>`).join('');$$('[data-guide-category]').forEach(button=>button.addEventListener('click',()=>{guideCategory=button.dataset.guideCategory;rebuildGuideFilters();renderGuide();}));}
   window.deleteCustomSnippet=(id)=>{snippets=snippets.filter(s=>s.id!==id);syncSnippets();toast('Snippet deleted');};
   $('#snippet-new').addEventListener('click',()=>{$('#snippet-form').classList.remove('hidden');$('#snippet-title').focus();});$('#snippet-cancel').addEventListener('click',()=>$('#snippet-form').classList.add('hidden'));
   $('#snippet-form').addEventListener('submit',(event)=>{event.preventDefault();snippets.push({id:crypto.randomUUID(),title:$('#snippet-title').value.trim(),category:$('#snippet-category').value.trim()||'Custom',command:$('#snippet-command').value.trim()});event.target.reset();event.target.classList.add('hidden');syncSnippets();toast('Snippet added');});
   $('#guide-export').addEventListener('click',()=>download('flagkit-guide.json',JSON.stringify({version:1,exported:new Date().toISOString(),customSnippets:snippets},null,2)));
-  $('#guide-import').addEventListener('change',async(event)=>{try{const data=await readJsonFile(event.target.files[0]);const incoming=Array.isArray(data)?data:data.customSnippets;if(!Array.isArray(incoming))throw new Error('No customSnippets array found');const byId=new Map(snippets.map(s=>[s.id,s]));incoming.filter(s=>s.title&&s.command).forEach(s=>byId.set(s.id||crypto.randomUUID(),{...s,id:s.id||crypto.randomUUID()}));snippets=[...byId.values()];syncSnippets();toast(`${incoming.length} snippets imported`);}catch(error){toast(`Import failed: ${error.message}`);}event.target.value='';});syncSnippets();
+  $('#guide-import').addEventListener('change',async(event)=>{try{const data=await readJsonFile(event.target.files[0]);const incoming=Array.isArray(data)?data:data.customSnippets;if(!Array.isArray(incoming))throw new Error('No customSnippets array found');const byId=new Map(snippets.map(s=>[s.id,s]));incoming.map(normalizeSnippet).filter(Boolean).slice(0,MAX_IMPORTED_SNIPPETS).forEach(s=>byId.set(s.id,s));snippets=[...byId.values()].slice(0,MAX_IMPORTED_SNIPPETS);syncSnippets();toast(`${snippets.length} snippets imported`);}catch(error){toast(`Import failed: ${error.message}`);}event.target.value='';});syncSnippets();
 
   // PWA install and service worker
   let deferredInstall=null;
