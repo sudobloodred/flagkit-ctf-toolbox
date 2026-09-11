@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="FlagKit CTF Scout classifies challenge clues and recommends the next workbench or reference tool without sending data anywhere." />
+    <meta name="theme-color" content="#090b0d" />
+    <title>FlagKit CTF Scout</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body { min-height: 100vh; }
+      .scout-shell { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 32px 0 64px; }
+      .scout-top { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:28px; }
+      .scout-brand { display:flex; align-items:center; gap:12px; color:inherit; text-decoration:none; }
+      .scout-brand .brand-mark { flex:0 0 auto; }
+      .scout-back { text-decoration:none; }
+      .scout-hero { margin-bottom:24px; }
+      .scout-hero h1 { margin:.25rem 0 .5rem; }
+      .scout-layout { display:grid; grid-template-columns:minmax(0, 1.05fr) minmax(320px, .95fr); gap:20px; align-items:start; }
+      .scout-input textarea { min-height:230px; }
+      .scout-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+      .scout-file { margin-top:14px; }
+      .scout-file-meta { display:block; margin-top:8px; opacity:.72; overflow-wrap:anywhere; }
+      .scout-results { display:grid; gap:14px; }
+      .scout-empty { min-height:220px; display:grid; place-items:center; text-align:center; opacity:.72; }
+      .scout-card { border:1px solid var(--line, #273038); border-radius:14px; padding:16px; background:var(--panel, #11161a); }
+      .scout-card-head { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; }
+      .scout-card h3 { margin:0; }
+      .scout-score { white-space:nowrap; font-size:.78rem; letter-spacing:.08em; opacity:.75; }
+      .scout-reason { margin:.65rem 0 0; opacity:.82; }
+      .scout-next { margin:.9rem 0 0; padding-left:1.15rem; }
+      .scout-next li + li { margin-top:.4rem; }
+      .scout-links { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; }
+      .scout-links a { text-decoration:none; }
+      .scout-note { margin-top:20px; font-size:.9rem; opacity:.75; }
+      .scout-pill { display:inline-flex; align-items:center; padding:4px 8px; border:1px solid var(--line, #273038); border-radius:999px; font-size:.72rem; letter-spacing:.08em; }
+      .scout-samples { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+      .scout-samples button { font:inherit; }
+      @media (max-width: 860px) { .scout-layout { grid-template-columns:1fr; } .scout-top { align-items:flex-start; } }
+    </style>
+  </head>
+  <body>
+    <main class="scout-shell">
+      <header class="scout-top">
+        <a class="scout-brand" href="index.html#dashboard">
+          <span class="brand-mark">FK</span>
+          <span><strong>FlagKit</strong><small style="display:block">CTF SCOUT</small></span>
+        </a>
+        <a class="ghost-button scout-back" href="index.html#dashboard">← TOOLBOX</a>
+      </header>
+
+      <section class="scout-hero">
+        <p class="eyebrow">CLASSIFY / ROUTE / SOLVE</p>
+        <h1>CTF Scout</h1>
+        <p>Paste a challenge clue, encoded value, hash, domain, URL, IP, JWT, filename, or question. Scout identifies likely challenge families and tells you where to go next.</p>
+        <span class="scout-pill">LOCAL-ONLY CLASSIFICATION</span>
+      </section>
+
+      <div class="scout-layout">
+        <section class="workbench scout-input">
+          <div class="editor full">
+            <div class="editor-head"><span>CHALLENGE CLUE / ARTIFACT</span><button id="scout-clear" type="button">CLEAR</button></div>
+            <textarea id="scout-input" spellcheck="false" placeholder="Examples: eyJhbGciOi...  •  example.com  •  5f4dcc3b5aa765d61d8327deb882cf99  •  hidden.png  •  What DNS TXT record contains the flag?"></textarea>
+          </div>
+          <div class="scout-actions">
+            <button class="primary-button" id="scout-run" type="button">ANALYZE</button>
+            <button class="ghost-button" id="scout-example" type="button">LOAD EXAMPLE</button>
+          </div>
+          <div class="scout-file">
+            <label class="ghost-button file-button">INSPECT FILE TYPE<input id="scout-file" type="file" /></label>
+            <small class="scout-file-meta" id="scout-file-meta">Optional: reads only the filename and first bytes locally.</small>
+          </div>
+          <div class="scout-samples" aria-label="Sample inputs">
+            <button class="ghost-button" type="button" data-scout-sample="U29tZXRoaW5nIGlzIGhpZGRlbiBoZXJl">BASE64</button>
+            <button class="ghost-button" type="button" data-scout-sample="example.com">DOMAIN</button>
+            <button class="ghost-button" type="button" data-scout-sample="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdGYiOiJmbGFna2RlbW99In0.signature">JWT</button>
+            <button class="ghost-button" type="button" data-scout-sample="5f4dcc3b5aa765d61d8327deb882cf99">HASH</button>
+          </div>
+          <p class="scout-note">Scout never contacts external services automatically. External tools appear only as links for you to open deliberately. Use them only with CTF artifacts and systems you are authorized to test.</p>
+        </section>
+
+        <section>
+          <div class="scout-results" id="scout-results">
+            <div class="workbench scout-empty"><div><strong>Waiting for a clue.</strong><p>Scout will rank the most likely paths and explain each recommendation.</p></div></div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <script src="scout.js"></script>
+  </body>
+</html>

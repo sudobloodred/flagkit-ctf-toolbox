@@ -12,8 +12,15 @@ python3 -m http.server 8080 --directory /home/sudosmash/ctf-toolbox
 
 Then visit `http://localhost:8080`.
 
+### CTF Scout
+
+Open `scout.html` to use the automated decision-tree assistant. Paste a challenge clue, encoded string, hash, domain, URL, IP, JWT, filename, or question and Scout will rank likely challenge families, explain why they matched, and route you to the most relevant FlagKit workbench.
+
+Scout can also inspect a selected file's name and first bytes locally to recognize common image, document, archive, executable, PCAP, and PCAPNG signatures. It never automatically sends challenge data to external services. CyberChef, crt.sh, MXToolbox, urlscan.io, VirusTotal, Wayback Machine, CrackStation, Aperi'Solve, StegOnline, and similar sites are presented only as optional links for deliberate use.
+
 ## Included tools
 
+- CTF Scout automated clue classification and decision-tree routing
 - Base64, hexadecimal, binary, decimal ASCII, URL, ROT13, reverse, and HTML entity transforms
 - Caesar cipher shift and all-shifts view
 - SHA-1, SHA-256, SHA-384, and SHA-512 generation plus hash-length identification
